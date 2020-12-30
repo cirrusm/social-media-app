@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block head %}
+cool
+{% endblock head %}
+{% block content %}
+<h1>Welcome to the Home page</h1>
+
+<div id="tweets">
+Replace Me</div>
+<script>
+const tweetsElement = document.getElementById("tweets")
+tweetsElement.innerHTML = 'Loading...'
+const xhr = new XMLHttpRequest()
+const method = 'GET'
+const url = "/tweets"
+const responseType = 'json'
+
+xhr.responseType = responseType
+xhr.open(method, url)
+xhr.onload = function(){
+    console.log(xhr.response)
+    const serverResponse = xhr.response
+    let listedItems = serverResponse.response
+    console.log(listedItems)
+}
+xhr.send()
+    </script>
+{% endblock content %}
