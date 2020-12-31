@@ -25,7 +25,7 @@ SECRET_KEY = ')iw=p0l&s^0=)d0%9at%@90qzy!*cbt3pd4m^t&a(%)la(mh!q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'enterherokudomainhere']
 
 
 # Application definition
