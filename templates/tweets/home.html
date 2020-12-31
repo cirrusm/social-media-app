@@ -36,9 +36,10 @@ const xhr = new XMLHttpRequest()
 xhr.open(method, url)
 xhr.onload = function(){
     const serverResponse = xhr.response
-    console.log(serverResponse)
+    loadTweets(tweetsEl)
 }
 xhr.send(myFormData)
+
 }
 
 tweetCreateFormEl.addEventListener('submit', handleFormDidSubmit )
@@ -53,6 +54,8 @@ tweetCreateFormEl.addEventListener('submit', handleFormDidSubmit )
 
     xhr.responseType = responseType;
     xhr.open(method, url);
+    xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", 'XMLHttpRequest')
+    xhr.setRequestHeader("X-Requested-With", 'XMLHttpRequest')
     xhr.onload = function () {
       console.log(xhr.response);
       const serverResponse = xhr.response;
@@ -61,7 +64,6 @@ tweetCreateFormEl.addEventListener('submit', handleFormDidSubmit )
       let i;
       for (i = 0; i < listedItems.length; i++) {
         let tweetObj = listedItems[i];
-        console.log(tweetObj);
         let currentItem = formatTweetElement(tweetObj);
         finalTweetStr += currentItem;
       }
