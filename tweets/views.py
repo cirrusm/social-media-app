@@ -4,6 +4,7 @@ from .models import Tweet
 from .forms import TweetForm
 from django.utils.http import is_safe_url
 from django.conf import settings
+from .serializers import TweetSerializer
 # Create your views here.
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
@@ -12,6 +13,15 @@ def home_view(request, *args, **kwargs):
     return render(request, "tweets/home.html", context = {})
 
 def tweet_create_view(request, *args, **kwargs):
+    serializer = TweetSerializer(data=request.POST or None)
+    if serializer.is_valid():
+        obj = serializer.save(user=request.user)
+        return JsonResponse(serializer.data, status = 201)
+    return JsonResponse({}, status = 400)
+
+
+def tweet_create_view_pure_django(request, *args, **kwargs):
+    user = request.user
     if not request.user.is_authenticated:
         if request.is_ajax():
             return JsonResponse({}, status = 401)
@@ -21,6 +31,7 @@ def tweet_create_view(request, *args, **kwargs):
     next_url = request.POST.get("next") or None
     if form.is_valid():
         obj = form.save(commit=False)
+        obj.user = user
         obj.save()
         if request.is_ajax():
             return JsonResponse(obj.serialize(), status=201) #status 201 is for created items

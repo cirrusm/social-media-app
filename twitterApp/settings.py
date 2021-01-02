@@ -26,7 +26,7 @@ SECRET_KEY = ')iw=p0l&s^0=)d0%9at%@90qzy!*cbt3pd4m^t&a(%)la(mh!q'
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'enterherokudomainhere']
-
+LOGIN_URL = '/login'
 
 # Application definition
 
@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #third-party
+    'rest_framework',
+    #internal
     'tweets'
 ]
 
