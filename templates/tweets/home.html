@@ -107,7 +107,7 @@ myErrorDiv.setAttribute("class", 'd-none alert alert-danger')
     xhr.open(method, url);
     xhr.onload = function () {
       const serverResponse = xhr.response;
-      let listedItems = serverResponse.response; //array
+      let listedItems = serverResponse; //array
       let finalTweetStr = "";
       let i;
       for (i = 0; i < listedItems.length; i++) {
