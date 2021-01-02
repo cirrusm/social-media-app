@@ -6,7 +6,9 @@ from django.utils.http import is_safe_url
 from django.conf import settings
 from .serializers import TweetSerializer
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication
 # Create your views here.
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
@@ -14,10 +16,11 @@ ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 def home_view(request, *args, **kwargs):
     return render(request, "tweets/home.html", context = {})
 
-@api_view(["POST"]) 
+@api_view(["POST"])
+@permission_classes([IsAuthenticated]) 
 def tweet_create_view(request, *args, **kwargs):
     serializer = TweetSerializer(data=request.POST)
-    if serializer.is_valid():
+    if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
         return JsonResponse(serializer.data, status = 201)
     return JsonResponse({}, status = 400)
@@ -37,6 +40,18 @@ def tweet_detail_view(request, tweet_id, *args, **kwargs):
     serializer = TweetSerializer(obj)
     return Response(serializer.data, status=200)
 
+@api_view(['DELETE', 'POST'])
+@permission_classes([IsAuthenticated])
+def tweet_delete_view(request, tweet_id, *args, **kwargs):
+    qs = Tweet.objects.filter(id = tweet_id)
+    if not qs.exists():
+        return Response({}, status = 404)
+    qs = qs.filter(user = request.user)
+    if not qs.exists():
+        return Response({'message': 'You can not delete this tweet'}, status=401)
+    obj = qs.first()
+    obj.delete()
+    return Response({"message": 'Tweet removed'}, status = 200)
 
 
 

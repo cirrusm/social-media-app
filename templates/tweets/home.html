@@ -83,7 +83,9 @@ myErrorDiv.setAttribute("class", 'd-none alert alert-danger')
         alert("Please Log In");
         //THIS REDIRECTS THEM TO LOGIN
         window.location.href = "/login"
-      } else if (xhr.status === 500) {
+        } else if (xhr.status === 403) {
+        alert("You must be logged in to do that");
+        } else if (xhr.status === 500) {
         alert("There was a server error please try again later");
       }
     };
