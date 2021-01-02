@@ -17,3 +17,5 @@ class Tweet(models.Model):
             'content': self.content,
             'likes': 0
         }
+    def __str__(self):
+        return self.content[0:20]
