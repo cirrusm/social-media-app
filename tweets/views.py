@@ -12,7 +12,10 @@ def home_view(request, *args, **kwargs):
     return render(request, "tweets/home.html", context = {})
 
 def tweet_create_view(request, *args, **kwargs):
-    
+    if not request.user.is_authenticated:
+        if request.is_ajax():
+            return JsonResponse({}, status = 401)
+        return redirect(settings.LOGIN_URL)
     form = TweetForm(request.POST or None)
     print(request.is_ajax())
     next_url = request.POST.get("next") or None
